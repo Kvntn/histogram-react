@@ -55,8 +55,8 @@ const Chart = () => {
 
     console.log(months);
 
-    const width = 1600;
-    const height = 900;
+    const width = 750;
+    const height = 400;
 
     const margin = {
         top: 60,
