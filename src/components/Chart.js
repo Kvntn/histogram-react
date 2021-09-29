@@ -20,19 +20,19 @@ const GET_POSTS = gql`
 
 const Chart = () => {
     const months = [
-        {month:"jan", value: 0},
-        {month:"feb", value: 0},
-        {month:"mar", value: 0},
-        {month:"apr", value: 0},
-        {month:"may", value: 0},
-        {month:"jun", value: 0},
-        {month:"jul", value: 0},
-        {month:"aug", value: 0},
-        {month:"sep", value: 0},
-        {month:"oct", value: 0},
-        {month:"nov", value: 0},
-        {month:"dec", value: 0},
-	];
+        { month: "jan", value: 0 },
+        { month: "feb", value: 0 },
+        { month: "mar", value: 0 },
+        { month: "apr", value: 0 },
+        { month: "may", value: 0 },
+        { month: "jun", value: 0 },
+        { month: "jul", value: 0 },
+        { month: "aug", value: 0 },
+        { month: "sep", value: 0 },
+        { month: "oct", value: 0 },
+        { month: "nov", value: 0 },
+        { month: "dec", value: 0 },
+    ];
 
     const { loading, error, data } = useQuery(GET_POSTS, {
         variables: { count: 10000 }, //? the ctrl alt f pretty thing breaks the variable
@@ -45,10 +45,10 @@ const Chart = () => {
         let date = new Date(Math.floor(res.createdAt)).toDateString();
         let dateArr = date.split(" ");
         if (dateArr[3] === "2019") {
-			let m = dateArr[1].toLocaleLowerCase()
-            months.map(mo => {
-				if(mo.month === m) mo.value += 1;
-			})
+            let m = dateArr[1].toLocaleLowerCase();
+            months.map((mo) => {
+                if (mo.month === m) mo.value += 1;
+            });
             return dateArr[1].toLocaleLowerCase();
         }
     });
@@ -71,7 +71,7 @@ const Chart = () => {
 
     //TODO accessor
     const x = (m) => m.month;
-	const y = (m) => m.value;
+    const y = (m) => m.value;
 
     const xScale = scaleBand({
         range: [0, xMax],
@@ -102,7 +102,7 @@ const Chart = () => {
                     const barX = xScale(label);
                     const barY = yMax - barHeight;
 
-                    return ( 
+                    return (
                         <Bar
                             key={`bar-${label}`}
                             x={barX}
