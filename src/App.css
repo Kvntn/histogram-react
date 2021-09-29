@@ -28,6 +28,12 @@
   color: #61dafb;
 }
 
+.vx-bar {
+
+	transition: height 150ms, y 150ms;
+  
+  }
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
