@@ -3,8 +3,8 @@ import { Group } from "@visx/group";
 import { GradientOrangeRed } from "@visx/gradient";
 import { AxisLeft, AxisBottom } from "@visx/axis";
 import { Bar } from "@visx/shape";
-import { extent, max } from "d3-array";
 import { scaleBand, scaleLinear } from "@visx/scale";
+import { css } from "@emotion/react";
 
 //gql
 import { useQuery, gql } from "@apollo/client";
@@ -35,25 +35,27 @@ const Chart = () => {
     ];
 
     const { loading, error, data } = useQuery(GET_POSTS, {
-        variables: { count: 10000 }, //? the ctrl alt f pretty thing breaks the variable
+        variables: { count: 10000 },
     });
 
     if (loading) return "Loading...";
     if (error) return `Error! ${error.message}`;
 
-    data.allPosts.map((res) => {
+    //? Data processing
+
+    data.allPosts.forEach((res) => {
         let date = new Date(Math.floor(res.createdAt)).toDateString();
         let dateArr = date.split(" ");
         if (dateArr[3] === "2019") {
             let m = dateArr[1].toLocaleLowerCase();
-            months.map((mo) => {
+            months.forEach((mo) => {
                 if (mo.month === m) mo.value += 1;
             });
             return dateArr[1].toLocaleLowerCase();
         }
     });
 
-    console.log(months);
+    //? Dimensions and display settings
 
     const width = 750;
     const height = 400;
@@ -67,11 +69,13 @@ const Chart = () => {
 
     const xMax = width - margin.left - margin.right;
     const yMax = height - margin.top - margin.bottom;
-    //! the "not very sure" part of the code starts here
 
-    //TODO accessor
+    //? Accessors
+
     const x = (m) => m.month;
     const y = (m) => m.value;
+
+    //? Axis Scales
 
     const xScale = scaleBand({
         range: [0, xMax],
@@ -86,8 +90,11 @@ const Chart = () => {
         domain: [0, Math.max(...months.map(y))],
     });
 
+    //? Final chart
+
     return (
         <svg width={width} height={height}>
+            <GradientOrangeRed id="gradOraRed" />
             <Group top={margin.top} left={margin.left}>
                 <AxisLeft
                     left={10}
@@ -104,11 +111,15 @@ const Chart = () => {
 
                     return (
                         <Bar
+                            className={css`
+                                transition: height 150ms, y 150ms;
+                            `}
                             key={`bar-${label}`}
                             x={barX}
                             y={barY}
                             width={barWidth}
                             height={barHeight}
+                            fill="url(#gradOraRed)"
                         />
                     );
                 })}
